@@ -5,11 +5,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def landing_page():
-    return render_template('landing_page')
+    return render_template('landing_page.html')
 
 
 @app.route('/game')
-def game():  # put application's code here
+def game():
     return render_template('game.html')
 
 
