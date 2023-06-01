@@ -5,14 +5,13 @@
     <title>Tic Tac Toe!</title>
     <link
       rel="stylesheet"
-      href="{{url_for('static', filename='indexpage.css')}}"
-    />
+      href="{{url_for('static', filename='indexpage.css')}}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 </head>
 <body>
-
     <div class="content">
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </div>
-
 </body>
 </html>

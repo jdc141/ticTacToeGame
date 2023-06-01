@@ -1,28 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>TicTacToe</title>
     <link rel="stylesheet" href="/static/main.css">
     <script src="/static/script.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
 </head>
 <body>
+
     <h1 class="title">Welcome to Tic Tac Toe!</h1>
 
+        <h2 id="game">Game Room: {{ code }}</h2>
+        <h2 id="name">Name: {{ name }}</h2>
+        <h4 id="turn"></h4>
+
     <div class="board" id="board">
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
+        <div id="0" class="cell" data-cell></div>
+        <div id="1" class="cell" data-cell></div>
+        <div id="2" class="cell" data-cell></div>
+        <div id="3" class="cell" data-cell></div>
+        <div id="4" class="cell" data-cell></div>
+        <div id="5" class="cell" data-cell></div>
+        <div id="6" class="cell" data-cell></div>
+        <div id="7" class="cell" data-cell></div>
+        <div id="8" class="cell" data-cell></div>
     </div>
     <div class="winning-message" id="winningMessage">
         <div data-winning-message-text></div>
         <button id="restartButton">Restart</button>
     </div>
+
+    <script type="text/javascript" charset="utf-8">
+
+
+    </script>
+
 </body>
-</html>

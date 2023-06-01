@@ -1,3 +1,7 @@
+const socket = io()
+socket.connect();
+
+let name = document.getElementById("name").innerText;
 const X_CLASS = 'x'
 const CIRCLE_CLASS = 'circle'
 const WINNING_COMBINATIONS = [
@@ -17,12 +21,20 @@ const restartButton = document.getElementById('restartButton')
 const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
 let circleTurn
 
+socket.on("connect", function (){
+  socket.emit("user_join", name);
+})
+
 startGame()
 
 restartButton.addEventListener('click', startGame)
 
 function startGame() {
   circleTurn = false
+  socket.emit("user_turn", circleTurn)
+  socket.on("user_turn", function (turn){
+    document.getElementById("turn").innerText = turn
+  })
   cellElements.forEach(cell => {
     cell.classList.remove(X_CLASS)
     cell.classList.remove(CIRCLE_CLASS)
@@ -37,6 +49,9 @@ function handleClick(e) {
   const cell = e.target
   const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS
   placeMark(cell, currentClass)
+
+  let a = 0;
+
   if (checkWin(currentClass)) {
     endGame(false)
   } else if (isDraw()) {
@@ -45,6 +60,7 @@ function handleClick(e) {
     swapTurns()
     setBoardHoverClass()
   }
+
 }
 
 function endGame(draw) {
@@ -63,11 +79,12 @@ function isDraw() {
 }
 
 function placeMark(cell, currentClass) {
-  cell.classList.add(currentClass)
+  cell.classList.add(currentClass);
 }
 
 function swapTurns() {
   circleTurn = !circleTurn
+  socket.emit("user_turn", circleTurn)
 }
 
 function setBoardHoverClass() {
@@ -87,3 +104,4 @@ function checkWin(currentClass) {
     })
   })
 }
+

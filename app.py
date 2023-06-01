@@ -1,16 +1,21 @@
 import random
 import string
-from flask_socketio import join_room, leave_room, send, SocketIO
+from flask_socketio import join_room, leave_room, send, SocketIO, emit
 
 from flask import *
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = b'_5#y2L"F4Q8z\n\xec]/'
 socketio = SocketIO(app)
+possible_turns = ["X's", "O's"]
 
 urls = {}
 
+board = [0, 0, 0,
+         0, 0, 0,
+         0, 0, 0]
 
+board_names = ["one", "two", "three", "four", "five", "six", "seven", "eight"]
 def generate_unique_url():
     while True:
         code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
@@ -52,10 +57,43 @@ def home():
 @app.route('/game')
 def game():
     game = session.get("game")
+    name = session.get("name")
     if game is None or session.get("name") is None or game not in urls:
         return redirect(url_for("home"))
 
-    return render_template('game.html')
+    return render_template("game.html", code=game, name=name)
+
+
+@socketio.on("connect")
+def handle_connect():
+    print("Client Connected!")
+
+
+@socketio.on("user_join")
+def handle_user_join(name):
+    print(f"user {name} joined!")
+
+# circle turn... if False, return X, if True, Return 0's
+@socketio.on("user_turn")
+def handle_user_turn(circleTurn):
+    if circleTurn == False:
+        user_turn = possible_turns[0]
+        emit("user_turn", user_turn, broadcast=True)
+    else:
+        user_turn = possible_turns[1]
+        emit("user_turn", user_turn, broadcast=True)
+
+
+@socketio.on("user_mark")
+def handle_user_mark(mark, circleTurn):
+    if circleTurn == False:
+        board[int(mark)] += 2
+        emit("user_mark", board, broadcast=True)
+        print(board)
+    else:
+        print(board)
+        board[int(mark)] += 1
+        emit("user_mark", board, broadcast=True)
 
 
 @app.errorhandler(404)
